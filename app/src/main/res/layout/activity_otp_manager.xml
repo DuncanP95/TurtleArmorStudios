@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="16dp"
+    android:background="@color/black">
+
+<EditText
+    android:id="@+id/editTextOtp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Enter OTP"/>
+
+<Button
+    android:id="@+id/buttonGenerateOtp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/purple_500"
+    android:textColor="@android:color/white"
+    android:text="Generate OTP"/>
+
+    <Button
+        android:id="@+id/buttonVerifyOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:text="Verify OTP"
+        android:textColor="@android:color/white"
+        android:translationY="30dp" />
+
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Result?"
+        android:textColor="#FFEB3B"
+        android:textSize="18sp"
+        android:translationY="50dp" />
+</LinearLayout>
