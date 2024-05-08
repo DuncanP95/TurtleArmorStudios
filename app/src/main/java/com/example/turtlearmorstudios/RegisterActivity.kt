@@ -16,7 +16,7 @@ class RegistrationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         val userDao = (application as MyApp).database.userDao()
-        val userRepository = UserRepository(userDao)  // Create UserRepository
+        val userRepository = UserRepository(userDao)
         val viewModelFactory = AuthViewModelFactory(userRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
 

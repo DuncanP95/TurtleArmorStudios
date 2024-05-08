@@ -1,12 +1,18 @@
 package com.example.turtlearmorstudios
 
+import PasswordsAdapter
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import com.example.turtlearmorstudios.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,22 +25,70 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val passwords = mutableListOf(
-            PasswordInfo("Account Name", "user@example.com", "Password123"),
-        )
-        passwordsAdapter = PasswordsAdapter(passwords,
-            onEdit = { passwordInfo, position ->
+            PasswordInfo("Facebook", "user@example.com", "Password123"),
+            PasswordInfo("Myspace", "user@example.com", "Password123"),
+            PasswordInfo("Ubisoft", "user@example.com", "Password123"),
+            PasswordInfo("World of Warcraft", "user@example.com", "Password123"),
+            PasswordInfo("Ubisoft", "user@example.com", "Password123"),
+            PasswordInfo("Youtube", "user@example.com", "Password123"),
+            PasswordInfo("Unreal Engine", "user@example.com", "Password123"),
+            PasswordInfo("Work", "user@example.com", "Password123"),
+            PasswordInfo("Amazon", "user@example.com", "Password123"),
+            PasswordInfo("This is Why I'm Broke", "user@example.com", "Password123"),
+            PasswordInfo("Yahoo", "user@example.com", "Password123"),
+            PasswordInfo("Gmail", "user@example.com", "Password123"),
+            PasswordInfo("MyMiami", "user@example.com", "Password123"),
+            PasswordInfo("BeeKeeper", "user@example.com", "Password123"),
+            PasswordInfo("EverQuest", "user@example.com", "Password123"),
+            PasswordInfo("Github", "user@example.com", "Password123"),
+            PasswordInfo("Twitch", "user@example.com", "Password123"),
+            PasswordInfo("Discord", "user@example.com", "Password123"),
+            PasswordInfo("Roblox", "user@example.com", "Password123"),
+            PasswordInfo("LimeWire", "user@example.com", "Password123"),
+            PasswordInfo("Roll20", "user@example.com", "Password123"),
+            PasswordInfo("Reddit", "user@example.com", "Password123"),
+            PasswordInfo("Nintendo", "user@example.com", "Password123"),
+            PasswordInfo("Playstation", "user@example.com", "Password123"),
+            PasswordInfo("Microsoft", "user@example.com", "Password123"),
+            PasswordInfo("Ancestry", "user@example.com", "Password123"),
+            PasswordInfo("Blizzard", "user@example.com", "Password123"),
+            PasswordInfo("Etsy", "user@example.com", "Password123"),
+            PasswordInfo("Walmart", "user@example.com", "Password123"),
+            PasswordInfo("EpicGames", "user@example.com", "Password123"),
+            PasswordInfo("Twitter", "user@example.com", "Password123"),
+            PasswordInfo("Instagram", "user@example.com", "Password123"),
+            PasswordInfo("iTunes", "user@example.com", "Password123"),
+            PasswordInfo("iCloud", "user@example.com", "Password123"),
+            PasswordInfo("Pinterest", "user@example.com", "Password123"),
+            PasswordInfo("Spotify", "user@example.com", "Password123"),
+            PasswordInfo("Duke Energy", "user@example.com", "Password123"),
+            PasswordInfo("Kroger", "user@example.com", "Password123"),
+            PasswordInfo("LinkedIn", "user@example.com", "Password123"),
+            PasswordInfo("Zillow", "user@example.com", "Password123"),
+            PasswordInfo("BlueStacks", "user@example.com", "Password123"),
+
+            )
+        passwordsAdapter = PasswordsAdapter(
+            passwords,
+            this,
+            onEdit = { position ->
+                val passwordInfo = passwords[position]
                 editPassword(passwordInfo, position)
             },
             onDelete = { position ->
                 passwordsAdapter.removePassword(position)
-                Toast.makeText(this, "Deleted password at position: $position", Toast.LENGTH_SHORT).show()
+                passwords.removeAt(position)
+                passwordsAdapter.notifyItemRemoved(position)
+                passwordsAdapter.notifyItemRangeChanged(position, passwords.size)
             }
         )
         setupRecyclerView()
+        setupSearchView()
         setupAddPasswordButton()
     }
 
     private fun setupRecyclerView() {
+
         binding.recyclerViewPasswords.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = passwordsAdapter
@@ -47,11 +101,53 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSearchView() {
+        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("Search", "Query text change: $newText")
+                passwordsAdapter.filter(newText ?: "")
+                return true
+            }
+        })
+    }
+
     private fun addNewPassword() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_password, null)
         val editTextServiceName = dialogView.findViewById<EditText>(R.id.editTextServiceName)
         val editTextUsername = dialogView.findViewById<EditText>(R.id.editTextUsername)
         val editTextPassword = dialogView.findViewById<EditText>(R.id.editTextNewPassword)
+        val buttonGeneratePassword = dialogView.findViewById<Button>(R.id.buttonGeneratePassword)
+        val seekBarPasswordLength = dialogView.findViewById<SeekBar>(R.id.seekBarPasswordLength)
+        val textViewPasswordLength = dialogView.findViewById<TextView>(R.id.textViewPasswordLength)
+        val checkBoxNumbers = dialogView.findViewById<CheckBox>(R.id.checkBoxNumbers)
+        val checkBoxSymbols = dialogView.findViewById<CheckBox>(R.id.checkBoxSymbols)
+        val checkBoxUppercase = dialogView.findViewById<CheckBox>(R.id.checkBoxUppercase)
+
+        seekBarPasswordLength.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                textViewPasswordLength.text = "Password Length: $progress"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+
+        buttonGeneratePassword.setOnClickListener {
+            val length = seekBarPasswordLength.progress
+            val useNumbers = checkBoxNumbers.isChecked
+            val useSymbols = checkBoxSymbols.isChecked
+            val useUppercase = checkBoxUppercase.isChecked
+            val generatedPassword =
+                PasswordGenerator.generatePassword(length, useNumbers, useSymbols, useUppercase)
+            editTextPassword.setText(generatedPassword)
+        }
 
         AlertDialog.Builder(this)
             .setTitle("Add New Password")

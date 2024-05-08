@@ -11,12 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
 
-    // Initialize the UserRepository or any other dependencies
     private val userRepository by lazy {
         UserRepository((application as MyApp).database.userDao())
     }
 
-    // Instantiate the factory with the required dependencies and initialize ViewModel
     private val authViewModel: AuthViewModel by viewModels {
         AuthViewModelFactory(userRepository)
     }
@@ -34,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
             val username = usernameEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
-            // Attempt to authenticate the user
             authViewModel.authenticateUser(username, password,
                 onSuccess = {
                     startActivity(Intent(this, OtpManagerActivity::class.java))
@@ -47,7 +44,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         registerLink.setOnClickListener {
-            // Intent to start RegistrationActivity
             val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
         }

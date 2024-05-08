@@ -6,11 +6,9 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    // Registers a new user
     fun registerUser(username: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                // Attempt to add the user to the repository
                 val isAdded = userRepository.addUser(username, password)
                 if (isAdded) {
                     onSuccess()
@@ -23,7 +21,6 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
-    // Authenticates an existing user
     fun authenticateUser(username: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {

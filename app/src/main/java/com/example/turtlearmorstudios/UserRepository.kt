@@ -1,8 +1,5 @@
 package com.example.turtlearmorstudios
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
@@ -29,7 +26,6 @@ class UserRepository(private val userDao: UserDao) {
     }
 
 
-    // Helper function to hash passwords
     private fun hashPassword(password: String): String {
         val bytes = password.toByteArray()
         val md = MessageDigest.getInstance("SHA-256")

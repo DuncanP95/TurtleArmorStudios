@@ -68,7 +68,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
-    <!-- Link to Registration Screen -->
     <TextView
         android:id="@+id/textViewRegister"
         android:layout_width="wrap_content"

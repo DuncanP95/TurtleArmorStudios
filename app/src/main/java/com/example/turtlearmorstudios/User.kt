@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey val username: String,
-    var password: String // Consider using encryption for storing passwords
+    var password: String
 )
